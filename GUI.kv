@@ -1,5 +1,4 @@
 BoxLayout:
-
     orientation: 'vertical'
     Label:
         text: 'Trip location'
@@ -16,7 +15,7 @@ BoxLayout:
         size_hint_y: 0.15
         orientation: 'horizontal'
         Spinner:
-            on_text: print(spinner.text)
+            on_text: app.enable_text()
             values: ()
             id: spinner
             size_hint_x: 0.4
@@ -30,14 +29,15 @@ BoxLayout:
             id: input_location
             text: ''
             size_hint_x: 0.6
+            disabled: True
             multiline: False
-            on_text_validate: app.convert_one()
+            on_text_validate: app.convert_to_location()
     BoxLayout:
         size_hint_y: 0.15
         orientation: 'horizontal'
         Label:
             size_hint_x: 0.4
-            text: 'Australia'
+            text: ''
             id: country_name
             canvas.before:
                 Color:
@@ -48,8 +48,9 @@ BoxLayout:
         TextInput:
             size_hint_x: 0.6
             id: input_home
+            disabled: True
             multiline: False
-            on_text_validate: app.convert_two()
+            on_text_validate: app.convert_to_home()
     Label:
         text: 'Today is:'
         size_hint_y: 0.35
@@ -61,6 +62,7 @@ BoxLayout:
             Rectangle:
                 pos: self.pos
                 size: self.size
+        font_size: 36
     BoxLayout:
         size_hint_y: 0.2
         Label:
@@ -77,4 +79,4 @@ BoxLayout:
             id: update_currency
             text: 'Update Currency'
             size_hint_x: 0.4
-            on_press: app.updated_time(), app.current_date(), app.convert(spinner.text)
+            on_press: app.current_date(), app.conversion_rates()
