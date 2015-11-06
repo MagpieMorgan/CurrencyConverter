@@ -2,7 +2,7 @@ from io import open
 from web_utility import load_page
 import re
 
-def convert(amount, home_currency, target_currency):
+def convert(amount, home_currency, target_currency): #Takes the currency codes and amounts and converts them using the google finance conversion
     try:
         if home_currency == target_currency:
             return "-1"
@@ -13,25 +13,16 @@ def convert(amount, home_currency, target_currency):
             if float(returned_numbers[0] or returned_numbers[1]) == amount:
                 return returned_numbers[1]
             else:
+
                 return "-1"
     except ValueError:
         return "-1"
 
-def get_all_details():
-    countries_dict = {}
-    searchfile = open("currency_details.txt", "r", encoding="utf-8")
-    for line in searchfile:
-        country_details = tuple(line.split(","))
-        countries_dict[country_details[0]] = country_details
-    searchfile.close()
-    return countries_dict
-
-def get_details(country_name):
-    file = open('currency_details.txt', encoding='utf-8')
-    for line in file:
-        words = [word for word in line.strip().split(',')]
-        if words[0] == country_name:
-            file.close()
-            return tuple(words)
-    file.close()
-    return ()
+def get_all_details(): #Obtains all details from the currency_details.txt.
+    countries_dict = {} #Creates an empty dictionary
+    searchfile = open("currency_details.txt", "r", encoding="utf-8") #Opens the currency_details.txt
+    for line in searchfile: #Looks through every line
+        country_details = tuple(line.split(",")) #Creates a tuple of each line, containing 3 items split by commas
+        countries_dict[country_details[0]] = country_details #using the name from the first tuple item as the key, it stores the entire tuple in the dictionary
+    searchfile.close() #closes the search file
+    return countries_dict #Returns the dictionary to the app/function requiring it
