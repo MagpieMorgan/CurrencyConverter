@@ -35,7 +35,7 @@ class GUI(App):
             target_currency = country_details[target_currency]
             target_currency_code = target_currency[1]
             converted_number = currency.convert(amount, target_currency_code, home_currency_code)
-            self.status_update(home_currency[2].strip('\n'), home_currency_code, target_currency[2].strip('\n'), target_currency_code)
+            self.status_update(target_currency[2].strip('\n'), target_currency_code, home_currency[2].strip('\n'), home_currency_code)
             self.root.ids.input_home.text = converted_number
         except ValueError:
             self.root.ids.input_home.text = "-1"
@@ -52,20 +52,28 @@ class GUI(App):
             target_currency_code = target_currency[1]
             converted_number = currency.convert(amount, home_currency_code, target_currency_code)
             self.root.ids.input_location.text = converted_number
+            self.status_update(home_currency[2].strip('\n'), home_currency_code, target_currency[2].strip('\n'), target_currency_code)
         except ValueError:
             self.root.ids.input_location.text = "-1"
 
     def read_config(self):
         config_details = []
         searchfile = open("config.txt", "r", encoding="utf-8")
-        first_line = searchfile.readline()
-        first_line = first_line.strip('\n')
-        self.root.ids.country_name.text = first_line
         for line in searchfile:
-            words = [line for word in line.split(",")]
-            config_details.append()
+            words = [line for line in line.strip().split(',')]
+            words = words[0]
+            config_details.append(words)
         searchfile.close()
-
+        home_country = config_details[0]
+        self.root.ids.country_name.text = home_country
+        config_details = config_details[1:]
+        print(config_details)
+        self.root.ids.spinner.values = config_details
+        
+    def enable_text(self):
+        self.root.ids.input_home.disabled = False
+        self.root.ids.input_location.disabled = False
+        
     def status_update(self, first_location, first_code, target_location, target_code):
         status_string = (first_code + "(" + first_location + ")" + " to " + target_code + "(" + target_location + ")")
         self.root.ids.status.text = str(status_string)
